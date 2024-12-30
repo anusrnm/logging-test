@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+    <ShutdownHook enable="true" />
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE} %-5p [%t] [%c{1}] %m%n"/>
+        </Console>
+        <Async name="ASYNC_CONSOLE">
+            <AppenderRef ref="CONSOLE"/>
+            <BufferSize>1000</BufferSize>
+            <Blocking>false</Blocking>
+        </Async>
+        <RollingRandomAccessFile name="APP_LOG_FILE" immediateFlush="${sys:log4j.immediateFlush:-false}"
+                                 fileName="${sys:server.log.dir}/app.log"
+                                 filePattern="${sys:server.log.dir}/app.log.%d{yyyy-MM-dd}-%i.gz">
+
+            <PatternLayout>
+                <Pattern>%d %-5p %c{1} [%t] - %m%n%ex</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="${sys:server.log.dir}" maxDepth="1">
+                    <IfFileName glob="*/app.log.*"/>
+                    <IfLastModified age="5d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <Async name="ASYNC_APP_LOG_FILE" blocking="true" bufferSize="1000">
+            <AppenderRef ref="APP_LOG_FILE"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="info">
+            <AppenderRef ref="ASYNC_APP_LOG_FILE"/>
+        </Logger>
+        <Logger name="com.example" level="debug" additivity="false">
+            <AppenderRef ref="ASYNC_APP_LOG_FILE"/>
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="ASYNC_APP_LOG_FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>

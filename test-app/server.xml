@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+    <GlobalNamingResources>
+        <Resource name="UserDatabase" auth="Container"
+                  type="org.apache.catalina.UserDatabase"
+                  description="User database that can be updated and saved"
+                  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                  pathname="conf/tomcat-users.xml" />
+    </GlobalNamingResources>
+
+
+    <Service name="testapp">
+        <Connector minSpareThreads="2" maxThreads="10" port="9080" protocol="HTTP/1.1" connectionTimeout="20000"/>
+        <Engine name="testapp" defaultHost="localhost">
+            <Host name="localhost" appBase="testapp" unpackWARs="false" autoDeploy="false" startStopThreads="0"/>
+        </Engine>
+    </Service>
+
+</Server>

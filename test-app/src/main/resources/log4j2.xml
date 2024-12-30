@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+    <ShutdownHook enable="true" />
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE}:: %-5p [%t] [%c{1}] %m%n"/>
+        </Console>
+        <Async name="ASYNC_CONSOLE">
+            <AppenderRef ref="CONSOLE"/>
+            <BufferSize>1000</BufferSize>
+            <Blocking>false</Blocking>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="info">
+            <AppenderRef ref="ASYNC_CONSOLE"/>
+        </Logger>
+        <Logger name="com.example" level="debug" additivity="false">
+            <AppenderRef ref="ASYNC_CONSOLE"/>
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="ASYNC_CONSOLE"/>
+        </Root>
+    </Loggers>
+</Configuration>
